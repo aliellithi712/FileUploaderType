@@ -1,0 +1,17 @@
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+<types>
+<members>fileUploader</members>
+<name>LightningComponentBundle</name>
+</types>
+<types>
+    <members>ContentVersion.Type__c</members>
+    <name>CustomField</name> 
+</types>
+<types>
+    <members>PicklistHelper</members>
+    <members>ContentVersionHandler</members>
+    <name>ApexClass</name> 
+</types>
+
+<version>63.0</version>
+</Package>
