@@ -7,6 +7,17 @@
     <members>ContentVersion.Type__c</members>
     <name>CustomField</name> 
 </types>
+
+<!-- <types>
+    <members>ContentVersion.Prevent_Upload_Without_Type</members>
+    <name>ValidationRule</name> 
+</types> -->
+
+<!-- <types>
+    <members>Case_Record_Page</members>
+    <name>FlexiPage</name> 
+</types> -->
+
 <types>
     <members>PicklistHelper</members>
     <members>ContentVersionHandler</members>

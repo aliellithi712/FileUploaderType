@@ -2,10 +2,11 @@ import { LightningElement, wire, api } from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import getPicklistValues from '@salesforce/apex/PicklistHelper.getPicklistValues';
 import assignType from '@salesforce/apex/ContentVersionHandler.assignType'
+import { RefreshEvent } from "lightning/refresh";
 
 
 export default class ProgressTabs extends LightningElement {
-  
+    @api recordId;
   currentStep = '1';
   currentPage = {
     first: true,
@@ -15,6 +16,7 @@ export default class ProgressTabs extends LightningElement {
   uploadedFiles = [];
   options = [];
   value = '';
+
 
   @wire (getPicklistValues, { objectName: 'ContentVersion', fieldName: 'Type__c' })
     wiredPicklist({ error, data }) {
@@ -50,6 +52,7 @@ export default class ProgressTabs extends LightningElement {
 
 
   handleNext() {
+    console.log("2 " , this.recordId)
     if (this.currentStep === '1') { 
         if(this.value == ''){
           const evt = new ShowToastEvent({
@@ -95,7 +98,7 @@ export default class ProgressTabs extends LightningElement {
     files.forEach(ele => {
       fileId = ele.documentId;
     });
-    
+
     const newFiles  = files.map( (file, i) => ({
         name: file.name,
         index: this.uploadedFiles.length + 1
@@ -103,7 +106,7 @@ export default class ProgressTabs extends LightningElement {
     }))
     this.uploadedFiles = [...this.uploadedFiles, ...newFiles];
 
-    assignType({recordId: fileId, type: this.value}).then(result =>{
+    assignType({flag: "upload",recordId: fileId, type: this.value}).then(result =>{
         if ( result == 'success' ){
         evt = new ShowToastEvent({
           title: 'Success',
@@ -114,7 +117,9 @@ export default class ProgressTabs extends LightningElement {
         this.dispatchEvent(evt);
         }
     })
-     
+    window.location.reload()
+    // this.dispatchEvent(new RefreshEvent());
+
     }
 
 

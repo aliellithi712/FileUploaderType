@@ -21,12 +21,11 @@
 
     <template if:true={currentPage.second}>
   <lightning-card title="File Uploader" class="slds-text-align_center" >        
-    <p class="slds-p-horizontal_small">Upload the file and specify the type of it</p>
         <lightning-file-upload
         label="Attach receipt"
         name="fileUploader"
         accept={acceptedFormats}
-        record-id={myRecordId}
+        record-id={recordId}
         onuploadfinished={handleUploadFinished}
         multiple
     >
@@ -34,14 +33,14 @@
 
     
 
-    <p slot="footer">
-        <template if:true={uploadedFiles}>
-            <template for:each={uploadedFiles} for:item="file" for:index="index">
-        <p key={file.name}>{file.index} {file.name} Uploaded </p>
+    <!-- <p slot="footer"> -->
+        <!-- <template if:true={uploadedFiles}> -->
+            <!-- <template for:each={uploadedFiles} for:item="file" for:index="index"> -->
+        <!-- <p key={file.name}>{file.index}. {file.name} Uploaded </p> -->
          
-      </template> 
-    </template>
-    </p>
+      <!-- </template>  -->
+    <!-- </template> -->
+    <!-- </p> -->
   </lightning-card>
   </template>
 
