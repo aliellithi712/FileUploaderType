@@ -8,6 +8,9 @@
                         data={files}
                         columns={columns}
                         hide-checkbox-column="true"
+                        sorted-by={sortBy}
+                        sorted-direction={sortDirection}
+                        onsort={handleSort}
                     >
                     </lightning-datatable>
                     <lightning-spinner alternative-text="Loading" size="small" if:true={isLoading}></lightning-spinner>

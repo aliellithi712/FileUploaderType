@@ -34,6 +34,30 @@ export default class RelatedFilesDatatable extends LightningElement {
     files;
     error;
     isLoading = false;
+    sortBy;
+    sortDirection;
+
+
+    handleSort(event) {
+        this.sortBy = event.detail.fieldName;
+        this.sortDirection = event.detail.sortDirection;
+        this.sortData(this.sortBy, this.sortDirection);
+    }
+
+    
+    sortData(fieldname, direction) {
+        let parseData = JSON.parse(JSON.stringify(this.files));
+        let keyValue = (a) => {
+            return a[fieldname];
+        };
+        let isReverse = direction === 'asc' ? 1: -1;
+        parseData.sort((x, y) => {
+            x = keyValue(x) ? keyValue(x) : '';
+            y = keyValue(y) ? keyValue(y) : '';
+            return isReverse * ((x > y) - (y > x));
+        });
+        this.files = parseData;
+    }    
     
     refreshContainerID;
 
@@ -51,7 +75,6 @@ export default class RelatedFilesDatatable extends LightningElement {
         setTimeout(() => {
           this.getRelatedFiles();
         }, 2000);
-        console.log("Done refreshing all components");
       } else if (status === REFRESH_COMPLETE_WITH_ERRORS) {
         console.warn("Done, with issues refreshing some components");
       } else if (status === REFRESH_ERROR) {
