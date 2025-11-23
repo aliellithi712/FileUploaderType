@@ -1,0 +1,68 @@
+<apex:page controller="AttachmentController">
+
+    <style>
+        [id$="attachmentsList_body"] table { visibility: hidden; }
+        [id$="attachmentsList"] .pbHeader { display: none !important; }
+        [id$="attachmentsList_body"] th.actionColumn, [id$="attachmentsList_body"] td.actionColumn {display: none !important;}
+        [id$="attachmentsList_body"] > div > a:nth-child(2) {display: none !important;}
+    </style>
+
+    <apex:relatedList list="AttachedContentDocuments"
+        subject="{!$CurrentPage.parameters.id}"
+        id="attachmentsList"
+    />
+
+    <script>
+
+        function editTable() {
+            const table = document.querySelector('[id$="attachmentsList_body"] table');
+            if (!table) return;
+
+            // Add header column
+            const headerRow = table.querySelector("tr.headerRow");
+            if (headerRow) {
+                const th = document.createElement("th");
+                th.innerText = "File Type";
+                headerRow.insertBefore(th, headerRow.children[1]);
+            }
+
+            // RemoteAction call
+            AttachmentController.getFileTypes(
+                "{!$CurrentPage.parameters.id}",
+                function(result, event) {
+                    if (event.status && result) {
+                        const rows = table.querySelectorAll("tr.dataRow");
+                        rows.forEach((row, index) => {
+                            const td = document.createElement("td");
+                            td.innerText = result[index] || "";
+                            row.insertBefore(td, row.children[1]);
+                        });
+                    }
+
+                    table.style.visibility = "visible";
+                }
+            );
+        }
+
+    
+const selector = '[id$="attachmentsList_body"] > div > a:nth-child(1)';
+let link = null;
+function setupListener() {
+    link = document.querySelector(selector);
+    if (!link) { setTimeout(setupListener, 1000); return; }
+    link.removeEventListener("click", handleClick);
+    link.addEventListener("click", handleClick);
+}
+
+function handleClick() {
+    setTimeout(editTable, 2000);
+    setTimeout(() => { setupListener();}, 1500);
+}
+
+setupListener();
+document.addEventListener("DOMContentLoaded", function() { editTable(); });
+
+        
+    </script>
+
+</apex:page>

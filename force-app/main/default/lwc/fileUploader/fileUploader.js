@@ -94,9 +94,17 @@ export default class ProgressTabs extends LightningElement {
 
   handleUploadFinished(event) {
     let fileId = '';
+    // log the size of the files uploades 
+    console.log('Files uploaded ', event.detail.files.length);
+    const size = event.detail.files[0].size;
+    console.log('Size of the file uploaded ', size);
+
     const files = event.detail.files;
+    //create list of strings
+    let fileIds = [];
     files.forEach(ele => {
       fileId = ele.documentId;
+      fileIds.push(fileId);
     });
 
     const newFiles  = files.map( (file, i) => ({
@@ -105,8 +113,9 @@ export default class ProgressTabs extends LightningElement {
         
     }))
     this.uploadedFiles = [...this.uploadedFiles, ...newFiles];
+    
 
-    assignType({flag: "upload",recordId: fileId, type: this.value}).then(result =>{
+    assignType({len: size,recordIds: fileIds, type: this.value}).then(result =>{
         if ( result == 'success' ){
         evt = new ShowToastEvent({
           title: 'Success',
@@ -117,8 +126,8 @@ export default class ProgressTabs extends LightningElement {
         this.dispatchEvent(evt);
         }
     })
-    window.location.reload()
-    // this.dispatchEvent(new RefreshEvent());
+    // window.location.reload()
+    this.dispatchEvent(new RefreshEvent());
 
     }
 

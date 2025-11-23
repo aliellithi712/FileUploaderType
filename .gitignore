@@ -8,18 +8,6 @@
 .localdevserver/
 deploy-options.json
 
-# Files/folders you want to exclude
-config/
-scripts/
-.forceignore
-.prettierignore
-.prettierrc
-eslint.config
-jest.config
-sfdx-project
-package
-
-
 # LWC VSCode autocomplete
 **/lwc/jsconfig.json
 
