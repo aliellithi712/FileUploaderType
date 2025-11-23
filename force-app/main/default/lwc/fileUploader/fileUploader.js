@@ -127,7 +127,7 @@ export default class ProgressTabs extends LightningElement {
         }
     })
     // window.location.reload()
-    this.dispatchEvent(new RefreshEvent());
+    // this.dispatchEvent(new RefreshEvent());
 
     }
 
