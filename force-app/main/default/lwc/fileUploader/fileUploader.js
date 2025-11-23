@@ -52,7 +52,6 @@ export default class ProgressTabs extends LightningElement {
 
 
   handleNext() {
-    console.log("2 " , this.recordId)
     if (this.currentStep === '1') { 
         if(this.value == ''){
           const evt = new ShowToastEvent({
@@ -94,10 +93,8 @@ export default class ProgressTabs extends LightningElement {
 
   handleUploadFinished(event) {
     let fileId = '';
-    // log the size of the files uploades 
-    console.log('Files uploaded ', event.detail.files.length);
     const size = event.detail.files[0].size;
-    console.log('Size of the file uploaded ', size);
+
 
     const files = event.detail.files;
     //create list of strings
@@ -125,9 +122,12 @@ export default class ProgressTabs extends LightningElement {
       });
         this.dispatchEvent(evt);
         }
+    }).then(() => {
+        this.dispatchEvent(new RefreshEvent());
     })
     // window.location.reload()
     // this.dispatchEvent(new RefreshEvent());
+    
 
     }
 

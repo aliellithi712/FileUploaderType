@@ -3,35 +3,5 @@
     <apiVersion>65.0</apiVersion>
     <availableInTouch>true</availableInTouch>
     <confirmationTokenRequired>false</confirmationTokenRequired>
-    <label>Related Attachments</label>
-    <packageVersions>
-        <majorNumber>2</majorNumber>
-        <minorNumber>2</minorNumber>
-        <namespace>Dashboard_Pal</namespace>
-    </packageVersions>
-    <packageVersions>
-        <majorNumber>1</majorNumber>
-        <minorNumber>0</minorNumber>
-        <namespace>docmanage</namespace>
-    </packageVersions>
-    <packageVersions>
-        <majorNumber>1</majorNumber>
-        <minorNumber>55</minorNumber>
-        <namespace>fan_astrea</namespace>
-    </packageVersions>
-    <packageVersions>
-        <majorNumber>1</majorNumber>
-        <minorNumber>23</minorNumber>
-        <namespace>sf_chttr_apps</namespace>
-    </packageVersions>
-    <packageVersions>
-        <majorNumber>1</majorNumber>
-        <minorNumber>7</minorNumber>
-        <namespace>sf_com_apps</namespace>
-    </packageVersions>
-    <packageVersions>
-        <majorNumber>1</majorNumber>
-        <minorNumber>9</minorNumber>
-        <namespace>trlhdtips</namespace>
-    </packageVersions>
+    <label>relatedListAttachment</label>
 </ApexPage>

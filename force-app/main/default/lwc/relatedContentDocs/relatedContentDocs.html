@@ -1,0 +1,24 @@
+<template>
+    <lightning-card title="Related Files" icon-name="standard:document">
+        <div class="slds-p-around_medium">
+            <template if:true={files}>
+                <template if:true={files.length}>
+                    <lightning-datatable
+                        key-field="Id"
+                        data={files}
+                        columns={columns}
+                        hide-checkbox-column="true"
+                    >
+                    </lightning-datatable>
+                    <lightning-spinner alternative-text="Loading" size="small" if:true={isLoading}></lightning-spinner>
+                </template>
+                <template if:false={files.length}>
+                    <p>No files are currently linked to this record.</p>
+                </template>
+            </template>
+            <template if:true={error}>
+                <div class="slds-text-color_error">An error occurred: {error.body.message}</div>
+            </template>
+        </div>
+    </lightning-card>
+</template>

@@ -4,11 +4,18 @@
     <types>
         <members>ContentVersionHandler</members>
         <members>PicklistHelper</members>
+        <members>FileListerController</members>
         <name>ApexClass</name>
     </types>
 
     <types>
+        <members>relatedListAttachment</members>
+        <name>ApexPage</name>
+    </types>
+
+    <types>
         <members>fileUploader</members>
+        <members>relatedContentDocs</members>
         <name>LightningComponentBundle</name>
     </types>
 
