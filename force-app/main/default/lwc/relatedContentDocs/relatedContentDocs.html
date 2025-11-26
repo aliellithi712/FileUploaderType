@@ -3,6 +3,18 @@
         <div class="slds-p-around_medium">
             <template if:true={files}>
                 <template if:true={files.length}>
+
+                    <template if:true={hasEdit}>
+                    <div class="slds-grid slds-grid_align-center slds-p-around_medium">
+                        <lightning-button 
+                        label="Refresh"
+                        icon-name="utility:refresh"
+                        variant="neutral"
+                        onclick={handleRefreshButton}>
+                    </lightning-button>
+                    </div>
+                    </template>
+                
                     <lightning-datatable
                         key-field="Id"
                         data={files}
@@ -15,6 +27,15 @@
                     >
                     </lightning-datatable>
                     <lightning-spinner alternative-text="Loading" size="small" if:true={isLoading}></lightning-spinner>
+
+                    <template if:true={isModalOpen}>
+                    <c-confirm-delete
+                    onclosedeletemodal={closeModal}
+                    onconfirmdeletemodal={handleDeleteConfirmed}
+                    ></c-confirm-delete>
+                    </template>
+                        
+                    
                 </template>
                 <template if:false={files.length}>
                     <p>No files are currently linked to this record.</p>

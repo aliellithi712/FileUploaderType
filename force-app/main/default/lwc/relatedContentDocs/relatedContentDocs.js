@@ -1,6 +1,7 @@
 import { LightningElement, api } from 'lwc';
 import getRelatedFiles from '@salesforce/apex/FileListerController.getRelatedFiles';
 import getRecordStatus from '@salesforce/apex/FileListerController.getRecordStatus';
+import deleteRecord from '@salesforce/apex/FileListerController.deleteRecord';
 import {
     registerRefreshContainer,
     unregisterRefreshContainer,
@@ -9,6 +10,8 @@ import {
     REFRESH_COMPLETE_WITH_ERRORS,
 } from "lightning/refresh";
 import {NavigationMixin} from 'lightning/navigation'
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+import { RefreshEvent } from "lightning/refresh";
 
 
 const ACTIONS = [
@@ -30,7 +33,15 @@ const BASE_COLUMNS = [
     },
     { label: 'File Type', fieldName: 'FileType', sortable: true },
     { label: 'Type', fieldName: 'Type__c', type: 'string', sortable: true },
-    { label: 'Uploaded On', fieldName: 'CreatedDate', type: 'date', sortable: true },
+    { label: 'Uploaded On', fieldName: 'CreatedDate', type: 'date', typeAttributes: {
+        day:'numeric',
+        month:'short',
+        year:'numeric',
+        hour:'2-digit',
+        minute:'2-digit',
+        second:'2-digit',
+        hour12:true}
+        , sortable: true },
     {
         type: 'action',
         typeAttributes: { rowActions: '' } 
@@ -45,6 +56,9 @@ export default class RelatedFilesDatatable extends NavigationMixin(LightningElem
     isLoading = false;
     sortBy;
     sortDirection;
+    isModalOpen;
+    tmpRow;
+    hasEdit = false;
     FilterFields= {
         Status__c: null
     }
@@ -58,6 +72,15 @@ export default class RelatedFilesDatatable extends NavigationMixin(LightningElem
             }
             return col;
         });
+    }
+
+    connectedCallback() { 
+        this.getRecordStatus();
+        this.refreshContainerID = registerRefreshContainer(this, this.handleRefresh.bind(this)); 
+    }
+    renderedCallback(){}
+    disconnectedCallback() { 
+        unregisterRefreshContainer(this.refreshContainerID); 
     }
 
     
@@ -97,13 +120,6 @@ export default class RelatedFilesDatatable extends NavigationMixin(LightningElem
     
     refreshContainerID;
 
-    connectedCallback() { 
-        this.getRecordStatus();
-        this.refreshContainerID = registerRefreshContainer(this, this.handleRefresh.bind(this)); 
-    }
-    disconnectedCallback() { 
-        unregisterRefreshContainer(this.refreshContainerID); 
-    }
     
 
     handleRefresh(refreshPromise) {
@@ -120,6 +136,9 @@ export default class RelatedFilesDatatable extends NavigationMixin(LightningElem
         }
     });
     }
+
+    handleRefreshButton(){ this.isLoading = true; setTimeout(() => { this.getRelatedFiles();}, 2000); this.hasEdit=false;}
+    
 
     getRecordStatus(){
         getRecordStatus({ recordId: this.recordId })
@@ -173,23 +192,61 @@ export default class RelatedFilesDatatable extends NavigationMixin(LightningElem
                         selectedRecordId: row.Id,
                     }
                 });
+                
                 break;
             case 'edit_record':
+
                 this[NavigationMixin.Navigate]({
                     type: 'standard__recordPage',
                     attributes: {
                         recordId: row.Id,
                         actionName: 'edit',
                     },
-                });
+                })
+                this.hasEdit = true;
                 break;
+
             case 'delete_record':
-                // Implement your delete logic here (e.g., call Apex delete method)
-                console.log(`Deleting file with ContentDocumentId: ${row.Id}`);
-                // After successful delete, you should call this.getRelatedFiles() to refresh the list.
+                this.tmpRow = row;    
+                this.isModalOpen = true;
                 break;
             default:
                 break;
         }
+    }
+
+
+    closeModal(){
+        this.tmpRow = null;
+        this.isModalOpen = false;
+    }
+
+    handleDeleteConfirmed(){
+        deleteRecord({recordId: this.tmpRow.Id }).then(result => {
+                    if(result == 'success'){
+                        const evt = new ShowToastEvent({
+                            title: 'Success',
+                            message: 'File deleted successfully',
+                            variant: 'success',
+                            mode: 'dismissable'
+                        });
+                        this.dispatchEvent(evt);
+                        this.dispatchEvent(new RefreshEvent());
+                    }
+                    else{
+                        const evt = new ShowToastEvent({
+                            title: 'File is not deleted',
+                            message: 'Error occured',
+                            variant: 'error',
+                            mode: 'dismissable'
+                        });
+                        this.dispatchEvent(evt);
+                    }
+                })
+                .catch(error => {
+                    console.log(error);
+                });
+                this.tmpRow = null;
+                this.isModalOpen = false;
     }
 }
