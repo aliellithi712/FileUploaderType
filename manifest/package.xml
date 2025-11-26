@@ -9,15 +9,15 @@
     </types>
 
     <types>
-        <members>relatedListAttachment</members>
-        <name>ApexPage</name>
-    </types>
-
-    <types>
         <members>fileUploader</members>
         <members>relatedContentDocs</members>
         <members>confirmDelete</members>
         <name>LightningComponentBundle</name>
+    </types>
+
+    <types>
+        <members>ContentVersion.Type__c</members>
+        <name>CustomField</name>
     </types>
 
 
