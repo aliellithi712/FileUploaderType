@@ -3,18 +3,4 @@
     <fullName>Enlisting_Fees_Visiting_Cards_Fees_Other_Fees</fullName>
     <active>true</active>
     <label>Enlisting Fees/Visiting Cards Fees/Other Fees</label>
-    <picklistValues>
-        <picklist>Pre_Approval_Types__c</picklist>
-        <values>
-            <fullName>Other_Pre_Activity_Documents</fullName>
-            <default>true</default>
-        </values>
-    </picklistValues>
-    <picklistValues>
-        <picklist>Post_Approval_Types__c</picklist>
-        <values>
-            <fullName>Invoices%2F%20Signed%20Agreement%20Documents%2FProof%20of%20Service-Benefits</fullName>
-            <default>true</default>
-        </values>
-    </picklistValues>
 </RecordType>

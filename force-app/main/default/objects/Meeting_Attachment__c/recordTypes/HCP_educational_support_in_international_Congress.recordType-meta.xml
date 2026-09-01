@@ -1,20 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<RecordType xmlns="http://sforce.com">
+<RecordType xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>HCP_educational_support_in_international_Congress</fullName>
     <active>true</active>
     <label>HCP_educational_support_in_international_Congress</label>
-    <picklistValues>
-        <picklist>Pre_Approval_Types__c</picklist>
-        <values>
-            <fullName>Scientific%20Content%20%26%20Agenda%2F%20Draft%20Agreement%20Documents%2F%20Travel%20%26%20Hospitality%20Planning%2FOther%20Documents</fullName>
-            <default>true</default>
-        </values>
-    </picklistValues>
-    <picklistValues>
-        <picklist>Post_Approval_Types__c</picklist>
-        <values>
-            <fullName>Attendance%20Sheet%2F%20%20Invoices</fullName>
-            <default>true</default>
-        </values>
-    </picklistValues>
 </RecordType>

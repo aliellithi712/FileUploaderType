@@ -10,7 +10,7 @@
         <valueSetDefinition>
             <sorted>false</sorted>
             <value>
-                <fullName>Other_Pre_Activity_Documents</fullName>
+                <fullName>Other Pre Activity Documents</fullName>
                 <default>false</default>
                 <label>Other Pre Activity Documents</label>
             </value>

@@ -30,8 +30,22 @@
     </types>
 
 
--->
+    <types>
+        <members>ContentVersion.Type__c</members>
+        <members>Meeting_Attachment__c.Pre_Approval_Types__c</members>
+        <members>Meeting_Attachment__c.Post_Approval_Types__c</members>
+        <name>CustomField</name>
+    </types>
 
+    <types>
+        <members>ContentVersion.Type__c</members>
+        <members>Meeting_Attachment__c.Pre_Approval_Types__c</members>
+        <members>Meeting_Attachment__c.Post_Approval_Types__c</members>
+        <name>CustomField</name>
+    </types>
+
+
+-->
 
     <types>
         <members>Meeting_Attachment__c.Business_Meal</members>
