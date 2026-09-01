@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
-
+<!--
     <types>
         <members>ContentVersionHandler</members>
         <members>PicklistHelper</members>
@@ -9,16 +9,53 @@
     </types>
 
     <types>
-        <members>fileUploader</members>
-        <members>relatedContentDocs</members>
-        <members>confirmDelete</members>
-        <name>LightningComponentBundle</name>
+        <members>ContentVersion.Type__c</members>
+        <members>Meeting_Attachment__c.Pre_Approval_Types__c</members>
+        <members>Meeting_Attachment__c.Post_Approval_Types__c</members>
+        <name>CustomField</name>
+    </types>
+
+
+
+    <types>
+        <members>FileListerController</members>
+        <name>ApexClass</name>
     </types>
 
     <types>
-        <members>ContentVersion.Type__c</members>
-        <name>CustomField</name>
+        <members>fileUploader</members>
+        <members>relatedContentDocs</members>
+        <members>confirmDelete</members>
+         <name>LightningComponentBundle</name>
     </types>
+
+
+
+
+
+-->
+
+
+    <types>
+        <members>Meeting_Attachment__c.Business_Meal</members>
+        <members>Meeting_Attachment__c.Opportunity_Meeting</members>
+        <members>Meeting_Attachment__c.AV_Meeting_With_Speaker</members>
+        <members>Meeting_Attachment__c.AV_Meeting_Without_Speaker</members>
+        <members>Meeting_Attachment__c.Enlisting_Fees_Visiting_Cards_Fees_Other_Fees</members>
+        <members>Meeting_Attachment__c.Items_of_Medical_Educational_Utility</members>
+        <members>Meeting_Attachment__c.Significant_Life_Event</members>
+        <members>Meeting_Attachment__c.Hospital_3rd_Party_Scientific_Event_Sponsorship</members>
+        <members>Meeting_Attachment__c.HCP_educational_support_in_international_Congress</members>
+        <members>Meeting_Attachment__c.Marketing_Lead_Activities</members>
+        <members>Meeting_Attachment__c.Non_Promotional</members>
+        <members>Meeting_Attachment__c.Promotional_CHC</members>
+        <members>Meeting_Attachment__c.Promotional_Primary_Care</members>
+        <members>Meeting_Attachment__c.Promotional_Specialty</members>
+        <name>RecordType</name>
+    </types>
+
+
+
 
 
     <version>64.0</version>

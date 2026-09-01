@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RecordType xmlns="http://sforce.com">
+    <fullName>Medical_Lead_Non_Promotional_Activities</fullName>
+    <active>true</active>
+    <label>Medical Lead Non-Promotional Activities</label>
+    <picklistValues>
+        <picklist>Pre_Approval_Types__c</picklist>
+        <values>
+            <fullName>All%20Pre-Activity%20Categories%20%28based%20on%20thesub%20type%20mapping%29</fullName>
+            <default>true</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Post_Approval_Types__c</picklist>
+        <values>
+            <fullName>All%20Post-Activity%20Categories%20%28based%20on%20thesub%20type%20mapping%29</fullName>
+            <default>true</default>
+        </values>
+    </picklistValues>
+</RecordType>

@@ -4,17 +4,17 @@
             <template if:true={files}>
                 <template if:true={files.length}>
 
-                    <template if:true={hasEdit}>
+                    <!-- <template if:true={hasEdit}>
                     <div class="slds-grid slds-grid_align-center slds-p-around_medium">
-                        <lightning-button 
+                        <lightning-button
                         label="Refresh"
                         icon-name="utility:refresh"
                         variant="neutral"
                         onclick={handleRefreshButton}>
                     </lightning-button>
                     </div>
-                    </template>
-                
+                    </template> -->
+
                     <lightning-datatable
                         key-field="Id"
                         data={files}
@@ -26,7 +26,7 @@
                         onrowaction={handleRowAction}
                     >
                     </lightning-datatable>
-                    <lightning-spinner alternative-text="Loading" size="small" if:true={isLoading}></lightning-spinner>
+
 
                     <template if:true={isModalOpen}>
                     <c-confirm-delete
@@ -34,9 +34,40 @@
                     onconfirmdeletemodal={handleDeleteConfirmed}
                     ></c-confirm-delete>
                     </template>
-                        
-                    
+
+                        <template if:true={isSecondModalOpen}>
+                            <section role="dialog" class="slds-modal slds-fade-in-open">
+                                <lightning-spinner alternative-text="Loading" size="small" if:true={isLoading}></lightning-spinner>
+                                <div class="slds-modal__container">
+                                    <header class="slds-modal__header">
+                                        <h2 class="slds-text-heading_medium">Edit Details</h2>
+                                    </header>
+
+                                    <div class="slds-modal__content slds-p-around_medium">
+                                        <lightning-input  data-id="name" label="Name" value={formData.name} onchange={handleInputChange} data-field="name">
+                                        </lightning-input>
+
+                                        <lightning-textarea data-id="description" label="Description" value={formData.description} onchange={handleInputChange}
+                                            data-field="description">
+                                        </lightning-textarea>
+
+                                        <lightning-combobox data-id="newType" label="Type" value={formData.type} options={formData.type}
+                                            onchange={handleInputChange} data-field="type">
+                                        </lightning-combobox>
+                                    </div>
+
+                                    <footer class="slds-modal__footer">
+                                        <lightning-button label="Cancel" onclick={closeModal}
+                                            class="slds-m-right_x-small"></lightning-button>
+                                        <lightning-button variant="brand" label="Save" onclick={handleSave}></lightning-button>
+                                    </footer>
+                                </div>
+                            </section>
+                            <div class="slds-backdrop slds-backdrop_open"></div>
+                        </template>
+
                 </template>
+
                 <template if:false={files.length}>
                     <p>No files are currently linked to this record.</p>
                 </template>

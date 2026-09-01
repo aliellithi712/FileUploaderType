@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Pre_Approval_Types__c</fullName>
+    <label>Pre-Approval Types</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Other_Pre_Activity_Documents</fullName>
+                <default>false</default>
+                <label>Other Pre Activity Documents</label>
+            </value>
+            <value>
+                <fullName>HCPs CVs/ Scientific Content &amp; Agenda/ Draft Agreement Documents/ FMV &amp; Financial Justification/ Logistics Documents/Other Pre Activity Documents</fullName>
+                <default>false</default>
+                <label>HCPs CVs/ Scientific Content &amp; Agenda/ Draft Agreement Documents/ FMV &amp; Financial Justification/ Logistics Documents/Other Pre Activity Documents</label>
+            </value>
+            <value>
+                <fullName>Presentation slides/  Scientific Content &amp; Agenda/ Logistics Documents/Other Pre Activity Documents</fullName>
+                <default>false</default>
+                <label>Presentation slides/  Scientific Content &amp; Agenda/ Logistics Documents/Other Pre Activity Documents</label>
+            </value>
+            <value>
+                <fullName>Quotations &amp; Proposals/Other Pre Activity Documents</fullName>
+                <default>false</default>
+                <label>Quotations &amp; Proposals/Other Pre Activity Documents</label>
+            </value>
+            <value>
+                <fullName>Presentation slides/ Quotations &amp; Proposals/Other Pre Activity Documents</fullName>
+                <default>false</default>
+                <label>Presentation slides/ Quotations &amp; Proposals/Other Pre Activity Documents</label>
+            </value>
+            <value>
+                <fullName>Scientific Content &amp; Agenda/ Draft Agreement Documents/ Quotations &amp; Proposals/Other Pre Activity Documents</fullName>
+                <default>false</default>
+                <label>Scientific Content &amp; Agenda/ Draft Agreement Documents/ Quotations &amp; Proposals/Other Pre Activity Documents</label>
+            </value>
+            <value>
+                <fullName>Scientific Content &amp; Agenda/ Draft Agreement Documents/ Travel &amp; Hospitality Planning/Other Pre Activity Documents</fullName>
+                <default>false</default>
+                <label>Scientific Content &amp; Agenda/ Draft Agreement Documents/ Travel &amp; Hospitality Planning/Other Pre Activity Documents</label>
+            </value>
+            <value>
+                <fullName>Scientific Content &amp; Agenda/ Draft Agreement Documents/ Travel &amp; Hospitality Planning/Other Documents</fullName>
+                <default>false</default>
+                <label>Scientific Content &amp; Agenda/ Draft Agreement Documents/ Travel &amp; Hospitality Planning/Other Documents</label>
+            </value>
+            <value>
+                <fullName>All Pre-Activity Categories (based on thesub type mapping)</fullName>
+                <default>false</default>
+                <label>All Pre-Activity Categories (based on thesub type mapping)</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

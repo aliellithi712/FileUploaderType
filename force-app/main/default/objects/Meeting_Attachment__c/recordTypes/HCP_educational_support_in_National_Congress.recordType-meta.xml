@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RecordType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>HCP_educational_support_in_National_Congress</fullName>
+    <active>false</active>
+    <label>HCP educational support in National Congress</label>
+</RecordType>

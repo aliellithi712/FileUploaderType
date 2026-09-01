@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RecordType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Enlisting_Fees_Visiting_Cards_Fees_Other_Fees</fullName>
+    <active>true</active>
+    <label>Enlisting Fees/Visiting Cards Fees/Other Fees</label>
+</RecordType>

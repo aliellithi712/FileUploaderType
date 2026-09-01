@@ -1,10 +1,14 @@
 import { LightningElement, api } from 'lwc';
 import getRelatedFiles from '@salesforce/apex/FileListerController.getRelatedFiles';
 import getRecordStatus from '@salesforce/apex/FileListerController.getRecordStatus';
+import handleChangeNameDescriptionPicklist from '@salesforce/apex/FileListerController.changeNameDescriptionPicklist';
+import getPicklistVlaues from '@salesforce/apex/FileListerController.getPicklistVlaues';
 import deleteRecord from '@salesforce/apex/FileListerController.deleteRecord';
 import {
     registerRefreshContainer,
     unregisterRefreshContainer,
+    registerRefreshHandler,
+    unregisterRefreshHandler ,
     REFRESH_ERROR,
     REFRESH_COMPLETE,
     REFRESH_COMPLETE_WITH_ERRORS,
@@ -17,22 +21,28 @@ import { RefreshEvent } from "lightning/refresh";
 const ACTIONS = [
     { label: 'View', name: 'view_record' },
     { label: 'Edit', name: 'edit_record' },
-    { label: 'Delete', name: 'delete_record' } 
+    { label: 'Delete', name: 'delete_record' }
 ];
 
 const BASE_COLUMNS = [
-    { 
-        label: 'File Name', 
-        fieldName: 'fileLink', 
-        type: 'url', 
-        typeAttributes: { 
-            label: { fieldName: 'Title' }, 
-            target: '_blank' 
+    {
+        label: 'File Name',
+        fieldName: 'fileLink',
+        type: 'url',
+        typeAttributes: {
+            label: { fieldName: 'Title' },
+            target: '_blank'
         },
-        sortable: true 
+        sortable: true
     },
-    { label: 'File Type', fieldName: 'FileType', sortable: true },
-    { label: 'Type', fieldName: 'Type__c', type: 'string', sortable: true },
+    {
+        label: 'Description',
+        fieldName: 'description',
+        sortable: true
+
+    },
+    // { label: 'File Type', fieldName: 'FileType', sortable: true },
+    { label: 'Type', fieldName: 'attachmentType', type: 'string', sortable: true },
     { label: 'Uploaded On', fieldName: 'CreatedDate', type: 'date', typeAttributes: {
         day:'numeric',
         month:'short',
@@ -44,7 +54,7 @@ const BASE_COLUMNS = [
         , sortable: true },
     {
         type: 'action',
-        typeAttributes: { rowActions: '' } 
+        typeAttributes: { rowActions: '' }
     }
 ];
 
@@ -57,13 +67,20 @@ export default class RelatedFilesDatatable extends NavigationMixin(LightningElem
     sortBy;
     sortDirection;
     isModalOpen;
+    isSecondModalOpen = false;
     tmpRow;
-    hasEdit = false;
+    oldType;
+    // hasEdit = false;
+    formData = {
+        name: '',
+        description: '',
+        type: []
+    };
     FilterFields= {
-        Status__c: null
+        OCE__Status__c: null
     }
 
-    
+
     constructor() {
         super();
         this.columns = BASE_COLUMNS.map(col => {
@@ -74,18 +91,26 @@ export default class RelatedFilesDatatable extends NavigationMixin(LightningElem
         });
     }
 
-    connectedCallback() { 
+    connectedCallback() {
         this.getRecordStatus();
-        this.refreshContainerID = registerRefreshContainer(this, this.handleRefresh.bind(this)); 
+        //this.refreshContainerID = registerRefreshContainer(this, this.handleRefresh.bind(this));
+        this.refreshHandlerID = registerRefreshHandler(this.template.host, this.handleRefresh.bind(this));
+        getPicklistVlaues().then(result => {
+            this.formData.type = result;
+        }).catch(error => {
+            this.error = error;
+        });
+
+
     }
     renderedCallback(){}
-    disconnectedCallback() { 
-        unregisterRefreshContainer(this.refreshContainerID); 
+    disconnectedCallback() {
+        unregisterRefreshHandler(this.refreshHandlerID);
     }
 
-    
+
     getRowActions(row, doneCallback) {
-        if (this.FilterFields.Status__c === 'Draft') {
+        if (this.FilterFields.OCE__Status__c !== 'Draft') {
             const approvedActions = ACTIONS.filter(action => action.name !== 'delete_record');
             doneCallback(approvedActions);
         } else {
@@ -94,15 +119,13 @@ export default class RelatedFilesDatatable extends NavigationMixin(LightningElem
     }
 
 
-
-
     handleSort(event) {
         this.sortBy = event.detail.fieldName;
         this.sortDirection = event.detail.sortDirection;
         this.sortData(this.sortBy, this.sortDirection);
     }
 
-    
+
     sortData(fieldname, direction) {
         let parseData = JSON.parse(JSON.stringify(this.files));
         let keyValue = (a) => {
@@ -117,13 +140,14 @@ export default class RelatedFilesDatatable extends NavigationMixin(LightningElem
         });
         this.files = parseData;
     }
-    
+
     refreshContainerID;
 
-    
 
+/*
     handleRefresh(refreshPromise) {
     return refreshPromise.then( (status) => {
+
         if (status === REFRESH_COMPLETE) {
             this.isLoading = true;
             setTimeout(() => {
@@ -136,16 +160,31 @@ export default class RelatedFilesDatatable extends NavigationMixin(LightningElem
         }
     });
     }
+*/
 
-    handleRefreshButton(){ this.isLoading = true; setTimeout(() => { this.getRelatedFiles();}, 2000); this.hasEdit=false;}
-    
+// 1. Your handler should NOT take arguments usually
+handleRefresh() {
+
+    return new Promise((resolve) => {
+        // this.isLoading = true;
+        this.getRelatedFiles()
+            .then(() => {
+                resolve(true);
+            })
+            .catch((error) => {
+                console.error('Refresh failed', error);
+                resolve(false); // Signal failure
+            });
+    });
+}
 
     getRecordStatus(){
         getRecordStatus({ recordId: this.recordId })
         .then(result => {
+
             this.FilterFields = {
                 ...this.FilterFields,
-                Status__c: result.OCE__Status__c
+                OCE__Status__c: result.OCE__Status__c
             }
         }).then(() => {
             this.getRelatedFiles();
@@ -158,12 +197,15 @@ export default class RelatedFilesDatatable extends NavigationMixin(LightningElem
     getRelatedFiles(){
         getRelatedFiles({ recordId: this.recordId })
         .then(result => {
-            this.isLoading = false;
-            this.files = result.map(file => {
+            console.log(result);
+            // this.isLoading = false;
+            this.files = result.map(item => {
                 return {
-                    ...file,
-                    fileLink: `/sfc/servlet.shepherd/version/download/${file.Id}`,
-                    Id : file.ContentDocumentId
+                    ...item.file,
+                    attachmentType: item.attachmentType,
+                    fileLink: `/sfc/servlet.shepherd/version/download/${item.file.Id}`,
+                    Id : item.file.ContentDocumentId,
+                    description: item.file.Description ? item.file.Description : '',
                 };
             });
             this.error = undefined;
@@ -178,8 +220,16 @@ export default class RelatedFilesDatatable extends NavigationMixin(LightningElem
     }
 
     handleRowAction(event) {
+
         const actionName = event.detail.action.name;
         const row = event.detail.row;
+        this.formData = {
+            ...this.formData,
+            name: row.Title,
+            description: row.description,
+            oldType : row.attachmentType,
+            ContentDocumentId: row.Id
+        }
 
         switch (actionName) {
             case 'view_record':
@@ -188,14 +238,19 @@ export default class RelatedFilesDatatable extends NavigationMixin(LightningElem
                     attributes: {
                         pageName:'filePreview'
                     },
-                    state:{ 
+                    state:{
                         selectedRecordId: row.Id,
                     }
                 });
-                
+
                 break;
             case 'edit_record':
+                this.tmpRow = row;
+                this.oldType = row.attachmentType;
+                this.isSecondModalOpen = true;
 
+
+                /*
                 this[NavigationMixin.Navigate]({
                     type: 'standard__recordPage',
                     attributes: {
@@ -203,11 +258,12 @@ export default class RelatedFilesDatatable extends NavigationMixin(LightningElem
                         actionName: 'edit',
                     },
                 })
-                this.hasEdit = true;
+                // this.hasEdit = true;
+                */
                 break;
 
             case 'delete_record':
-                this.tmpRow = row;    
+                this.tmpRow = row;
                 this.isModalOpen = true;
                 break;
             default:
@@ -219,9 +275,15 @@ export default class RelatedFilesDatatable extends NavigationMixin(LightningElem
     closeModal(){
         this.tmpRow = null;
         this.isModalOpen = false;
+        this.isSecondModalOpen = false;
+        this.formData = {
+            ...this.formData,
+            newType: ''
+        }
     }
 
     handleDeleteConfirmed(){
+
         deleteRecord({recordId: this.tmpRow.Id }).then(result => {
                     if(result == 'success'){
                         const evt = new ShowToastEvent({
@@ -231,7 +293,6 @@ export default class RelatedFilesDatatable extends NavigationMixin(LightningElem
                             mode: 'dismissable'
                         });
                         this.dispatchEvent(evt);
-                        this.dispatchEvent(new RefreshEvent());
                     }
                     else{
                         const evt = new ShowToastEvent({
@@ -242,11 +303,57 @@ export default class RelatedFilesDatatable extends NavigationMixin(LightningElem
                         });
                         this.dispatchEvent(evt);
                     }
+                }).then(() => {
+                    this.dispatchEvent(new RefreshEvent());
                 })
                 .catch(error => {
                     console.log(error);
+                    const evt = new ShowToastEvent({
+                            title: 'File is not deleted',
+                            message: 'Server Error occured',
+                            variant: 'error',
+                            mode: 'dismissable'
+                        });
+                        this.dispatchEvent(evt);
                 });
                 this.tmpRow = null;
                 this.isModalOpen = false;
+    }
+
+    handleInputChange(event){
+        const field = event.target.dataset.id;
+        const value = event.target.value;
+        this.formData = {
+            ...this.formData,
+            [field]: value
+
+        };
+    }
+    handleSave(event){
+        this.isLoading = true;
+        handleChangeNameDescriptionPicklist({ recordId: this.tmpRow.Id, name: this.formData.name, description: this.formData.description, newType: this.formData.newType , oldType: this.formData.oldType, meetingId: this.recordId }).then(result => {
+            if(result == 'success'){
+                this.isLoading = false;
+                const evt = new ShowToastEvent({
+                    title: 'Success',
+                    message: 'File updated successfully',
+                    variant: 'success',
+                    mode: 'dismissable'
+                });
+                this.dispatchEvent(evt);
+            }
+            else{
+                const evt = new ShowToastEvent({
+                    title: 'File is not updated',
+                    message: 'Error occured',
+                    variant: 'error',
+                    mode: 'dismissable'
+                });
+                this.dispatchEvent(evt);
+            }
+        }).then(() => {
+            this.isSecondModalOpen = false;
+            this.dispatchEvent(new RefreshEvent());
+        })
     }
 }

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RecordType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Hospital_3rd_Party_Scientific_Event_Sponsorship</fullName>
+    <active>true</active>
+    <label>Hospital /3rd Party Scientific Event Sponsorship</label>
+</RecordType>
