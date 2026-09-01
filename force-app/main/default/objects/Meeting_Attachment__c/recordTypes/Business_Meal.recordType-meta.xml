@@ -3,4 +3,18 @@
     <fullName>Business_Meal</fullName>
     <active>true</active>
     <label>Business Meal</label>
+    <picklistValues>
+        <picklist>Pre_Approval_Types__c</picklist>
+        <values>
+            <fullName>Other_Pre_Activity_Documents</fullName>
+            <default>true</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Post_Approval_Types__c</picklist>
+        <values>
+            <fullName>Attendance%20Sheet%2F%20Invoices</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
 </RecordType>

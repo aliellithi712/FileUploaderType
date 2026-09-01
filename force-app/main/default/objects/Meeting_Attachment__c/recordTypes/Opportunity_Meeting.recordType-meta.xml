@@ -3,4 +3,18 @@
     <fullName>Opportunity_Meeting</fullName>
     <active>true</active>
     <label>Opportunity Meeting</label>
+    <picklistValues>
+        <picklist>Pre_Approval_Types__c</picklist>
+        <values>
+            <fullName>Other_Pre_Activity_Documents</fullName>
+            <default>true</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Post_Approval_Types__c</picklist>
+        <values>
+            <fullName>Invoices</fullName>
+            <default>true</default>
+        </values>
+    </picklistValues>
 </RecordType>
