@@ -30,6 +30,8 @@
     </types>
 
 
+-->
+
 
     <types>
         <members>Meeting_Attachment__c.Business_Meal</members>
@@ -48,17 +50,6 @@
         <members>Meeting_Attachment__c.Promotional_Specialty</members>
         <name>RecordType</name>
     </types>
-
-
-
--->
-
-
-    <types>
-        <members>Meeting_Attachment__c.AV_Meeting_With_Speaker</members>
-        <name>RecordType</name>
-    </types>
-
 
 
 
