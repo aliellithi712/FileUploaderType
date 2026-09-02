@@ -10,29 +10,9 @@
         <valueSetDefinition>
             <sorted>false</sorted>
             <value>
-                <fullName>Attendance Sheet/ Invoices</fullName>
+                <fullName>Attendance Sheet</fullName>
                 <default>false</default>
-                <label>Attendance Sheet/ Invoices</label>
-            </value>
-            <value>
-                <fullName>Attendance Sheet/ Invoices/ Signed Agreement Documents/ Activity Photos/Final Presentation slides/Proof of Service-Benefits</fullName>
-                <default>false</default>
-                <label>Attendance Sheet/ Invoices/ Signed Agreement Documents/ Activity Photos/Final Presentation slides/Proof of Service-Benefits</label>
-            </value>
-            <value>
-                <fullName>Attendance Sheet/ Invoices/ Activity Photos/Proof of Service-Benefits</fullName>
-                <default>false</default>
-                <label>Attendance Sheet/ Invoices/ Activity Photos/Proof of Service-Benefits</label>
-            </value>
-            <value>
-                <fullName>Invoices/ Signed Agreement Documents/Proof of Service-Benefits</fullName>
-                <default>false</default>
-                <label>Invoices/ Signed Agreement Documents/Proof of Service-Benefits</label>
-            </value>
-            <value>
-                <fullName>Invoices/ Proof of Service-Benefits</fullName>
-                <default>false</default>
-                <label>Invoices/ Proof of Service-Benefits</label>
+                <label>Attendance Sheet</label>
             </value>
             <value>
                 <fullName>Invoices</fullName>
@@ -40,19 +20,29 @@
                 <label>Invoices</label>
             </value>
             <value>
-                <fullName>Invoices/ Final Presentation slides-Material</fullName>
+                <fullName>Signed Agreement Documents</fullName>
                 <default>false</default>
-                <label>Invoices/ Final Presentation slides-Material</label>
+                <label>Signed Agreement Documents</label>
             </value>
             <value>
-                <fullName>Invoices/ Proof of Service-Benefits/ Signed Agreement Documents</fullName>
+                <fullName>Activity Photos</fullName>
                 <default>false</default>
-                <label>Invoices/ Proof of Service-Benefits/ Signed Agreement Documents</label>
+                <label>Activity Photos</label>
             </value>
             <value>
-                <fullName>Attendance Sheet/  Invoices</fullName>
+                <fullName>Final Presentation slides</fullName>
                 <default>false</default>
-                <label>Attendance Sheet/  Invoices</label>
+                <label>Final Presentation slides</label>
+            </value>
+            <value>
+                <fullName>Proof of Service-Benefits</fullName>
+                <default>false</default>
+                <label>Proof of Service-Benefits</label>
+            </value>
+            <value>
+                <fullName>Final Presentation slides-Material</fullName>
+                <default>false</default>
+                <label>Final Presentation slides-Material</label>
             </value>
             <value>
                 <fullName>All Post-Activity Categories (based on thesub type mapping)</fullName>

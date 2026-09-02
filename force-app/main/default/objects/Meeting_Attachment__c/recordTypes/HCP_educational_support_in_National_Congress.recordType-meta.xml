@@ -6,15 +6,31 @@
     <picklistValues>
         <picklist>Pre_Approval_Types__c</picklist>
         <values>
-            <fullName>Scientific%20Content%20%26%20Agenda%2F%20Draft%20Agreement%20Documents%2F%20Travel%20%26%20Hospitality%20Planning%2FOther%20Pre%20Activity%20Documents</fullName>
-            <default>true</default>
+            <fullName>Draft%20Agreement%20Documents</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Other%20Pre%20Activity%20Documents</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Scientific%20Content%20%26%20Agenda</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Travel%20%26%20Hospitality%20Planning</fullName>
+            <default>false</default>
         </values>
     </picklistValues>
     <picklistValues>
         <picklist>Post_Approval_Types__c</picklist>
         <values>
-            <fullName>Attendance%20Sheet%2F%20%20Invoices</fullName>
-            <default>true</default>
+            <fullName>Attendance%20Sheet</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Invoices</fullName>
+            <default>false</default>
         </values>
     </picklistValues>
     <picklistValues>

@@ -10,44 +10,59 @@
         <valueSetDefinition>
             <sorted>false</sorted>
             <value>
+                <fullName>All Pre-Activity Categories (based on the sub type mapping)</fullName>
+                <default>false</default>
+                <label>All Pre-Activity Categories (based on the sub type mapping)</label>
+            </value>
+            <value>
+                <fullName>Draft Agreement Documents</fullName>
+                <default>false</default>
+                <label>Draft Agreement Documents</label>
+            </value>
+            <value>
+                <fullName>FMV &amp; Financial Justification</fullName>
+                <default>false</default>
+                <label>FMV &amp; Financial Justification</label>
+            </value>
+            <value>
+                <fullName>HCPs CVs</fullName>
+                <default>false</default>
+                <label>HCPs CVs</label>
+            </value>
+            <value>
+                <fullName>Logistics Documents</fullName>
+                <default>false</default>
+                <label>Logistics Documents</label>
+            </value>
+            <value>
+                <fullName>Other Documents</fullName>
+                <default>false</default>
+                <label>Other Documents</label>
+            </value>
+            <value>
                 <fullName>Other Pre Activity Documents</fullName>
                 <default>false</default>
                 <label>Other Pre Activity Documents</label>
             </value>
             <value>
-                <fullName>HCPs CVs/ Scientific Content &amp; Agenda/ Draft Agreement Documents/ FMV &amp; Financial Justification/ Logistics Documents/Other Pre Activity Documents</fullName>
+                <fullName>Presentation slides</fullName>
                 <default>false</default>
-                <label>HCPs CVs/ Scientific Content &amp; Agenda/ Draft Agreement Documents/ FMV &amp; Financial Justification/ Logistics Documents/Other Pre Activity Documents</label>
+                <label>Presentation slides</label>
             </value>
             <value>
-                <fullName>Presentation slides/  Scientific Content &amp; Agenda/ Logistics Documents/Other Pre Activity Documents</fullName>
+                <fullName>Quotations &amp; Proposals</fullName>
                 <default>false</default>
-                <label>Presentation slides/  Scientific Content &amp; Agenda/ Logistics Documents/Other Pre Activity Documents</label>
+                <label>Quotations &amp; Proposals</label>
             </value>
             <value>
-                <fullName>Quotations &amp; Proposals/Other Pre Activity Documents</fullName>
+                <fullName>Scientific Content &amp; Agenda</fullName>
                 <default>false</default>
-                <label>Quotations &amp; Proposals/Other Pre Activity Documents</label>
+                <label>Scientific Content &amp; Agenda</label>
             </value>
             <value>
-                <fullName>Presentation slides/ Quotations &amp; Proposals/Other Pre Activity Documents</fullName>
+                <fullName>Travel &amp; Hospitality Planning</fullName>
                 <default>false</default>
-                <label>Presentation slides/ Quotations &amp; Proposals/Other Pre Activity Documents</label>
-            </value>
-            <value>
-                <fullName>Scientific Content &amp; Agenda/ Draft Agreement Documents/ Quotations &amp; Proposals/Other Pre Activity Documents</fullName>
-                <default>false</default>
-                <label>Scientific Content &amp; Agenda/ Draft Agreement Documents/ Quotations &amp; Proposals/Other Pre Activity Documents</label>
-            </value>
-            <value>
-                <fullName>Scientific Content &amp; Agenda/ Draft Agreement Documents/ Travel &amp; Hospitality Planning/Other Pre Activity Documents</fullName>
-                <default>false</default>
-                <label>Scientific Content &amp; Agenda/ Draft Agreement Documents/ Travel &amp; Hospitality Planning/Other Pre Activity Documents</label>
-            </value>
-            <value>
-                <fullName>Scientific Content &amp; Agenda/ Draft Agreement Documents/ Travel &amp; Hospitality Planning/Other Documents</fullName>
-                <default>false</default>
-                <label>Scientific Content &amp; Agenda/ Draft Agreement Documents/ Travel &amp; Hospitality Planning/Other Documents</label>
+                <label>Travel &amp; Hospitality Planning</label>
             </value>
             <value>
                 <fullName>All Pre-Activity Categories (based on thesub type mapping)</fullName>

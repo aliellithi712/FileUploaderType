@@ -3,4 +3,49 @@
     <fullName>Hospital_3rd_Party_Scientific_Event_Sponsorship</fullName>
     <active>true</active>
     <label>Hospital /3rd Party Scientific Event Sponsorship</label>
+    <picklistValues>
+        <picklist>Pre_Approval_Types__c</picklist>
+        <values>
+            <fullName>Draft%20Agreement%20Documents</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Other%20Pre%20Activity%20Documents</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Quotations%20%26%20Proposals</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Scientific%20Content%20%26%20Agenda</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Post_Approval_Types__c</picklist>
+        <values>
+            <fullName>Invoices</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Proof%20of%20Service-Benefits</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Signed%20Agreement%20Documents</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Type__c</picklist>
+        <values>
+            <fullName>Post-Approval</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pre-Approval</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
 </RecordType>

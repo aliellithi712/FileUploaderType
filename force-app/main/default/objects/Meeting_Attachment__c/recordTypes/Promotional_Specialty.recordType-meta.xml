@@ -3,4 +3,41 @@
     <fullName>Promotional_Specialty</fullName>
     <active>true</active>
     <label>Promotional – Specialty</label>
+    <picklistValues>
+        <picklist>Pre_Approval_Types__c</picklist>
+        <values>
+            <fullName>Other%20Pre%20Activity%20Documents</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Presentation%20slides</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Quotations%20%26%20Proposals</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Post_Approval_Types__c</picklist>
+        <values>
+            <fullName>Final%20Presentation%20slides-Material</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Invoices</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Type__c</picklist>
+        <values>
+            <fullName>Post-Approval</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pre-Approval</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
 </RecordType>
