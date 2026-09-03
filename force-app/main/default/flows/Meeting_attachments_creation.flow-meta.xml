@@ -1,6 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <actionCalls>
+        <name>Copy_1_of_Get_Picklist_Values</name>
+        <label>Copy 1 of Get Picklist Values</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>IQVIA_GetPicklistRTT</actionName>
+        <actionType>apex</actionType>
+        <connector>
+            <targetReference>Copy_1_of_Picklist_Values_Loop</targetReference>
+        </connector>
+        <flowTransactionModel>Automatic</flowTransactionModel>
+        <inputParameters>
+            <name>objectName</name>
+            <value>
+                <stringValue>Meeting_Attachment__c</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>picklistName</name>
+            <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
+                <stringValue>Post_Approval_Types__c</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>recordTypeId</name>
+            <value>
+                <elementReference>Get_RT.Id</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>IQVIA_GetPicklistRTT</nameSegment>
+        <offset>0</offset>
+        <outputParameters>
+            <assignToReference>picklistValues</assignToReference>
+            <name>returnValues</name>
+        </outputParameters>
+    </actionCalls>
+    <actionCalls>
         <name>Get_Picklist_Values</name>
         <label>Get Picklist Values</label>
         <locationX>0</locationX>
@@ -20,7 +57,8 @@
         <inputParameters>
             <name>picklistName</name>
             <value>
-                <stringValue>Type__c</stringValue>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
+                <stringValue>Pre_Approval_Types__c</stringValue>
             </value>
         </inputParameters>
         <inputParameters>
@@ -38,6 +76,43 @@
     </actionCalls>
     <apiVersion>66.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <decisions>
+        <name>Meeting_Status</name>
+        <label>Meeting Status</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Draft</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.OCE__Status__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Draft</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Picklist_Values</targetReference>
+            </connector>
+            <label>Draft</label>
+        </rules>
+        <rules>
+            <name>Approved</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.OCE__Status__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Approved</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Copy_1_of_Get_Picklist_Values</targetReference>
+            </connector>
+            <label>Approved</label>
+        </rules>
+    </decisions>
     <environments>Default</environments>
     <formulas>
         <name>RecordTypeName</name>
@@ -46,6 +121,20 @@
     </formulas>
     <interviewLabel>Meeting attachments creation {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Meeting attachments creation</label>
+    <loops>
+        <name>Copy_1_of_Picklist_Values_Loop</name>
+        <label>Copy 1 of Picklist Values Loop</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <collectionReference>picklistValues</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Copy_1_of_Create_Attachment</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Check_Attachments_Creation</targetReference>
+        </noMoreValuesConnector>
+    </loops>
     <loops>
         <name>Picklist_Values_Loop</name>
         <label>Picklist Values Loop</label>
@@ -80,6 +169,47 @@
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
     <recordCreates>
+        <name>Copy_1_of_Create_Attachment</name>
+        <label>Copy 1 of Create Attachment</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Copy_1_of_Picklist_Values_Loop</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Meeting__c</field>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Name</field>
+            <value>
+                <elementReference>Copy_1_of_Picklist_Values_Loop</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Post_Approval_Types__c</field>
+            <value>
+                <elementReference>Copy_1_of_Picklist_Values_Loop</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>RecordTypeId</field>
+            <value>
+                <elementReference>Get_RT.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Type__c</field>
+            <value>
+                <stringValue>Post-Approval</stringValue>
+            </value>
+        </inputAssignments>
+        <object>Meeting_Attachment__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordCreates>
         <name>Create_Attachment</name>
         <label>Create Attachment</label>
         <locationX>0</locationX>
@@ -100,6 +230,12 @@
             </value>
         </inputAssignments>
         <inputAssignments>
+            <field>Pre_Approval_Types__c</field>
+            <value>
+                <elementReference>Picklist_Values_Loop</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
             <field>RecordTypeId</field>
             <value>
                 <elementReference>Get_RT.Id</elementReference>
@@ -108,7 +244,7 @@
         <inputAssignments>
             <field>Type__c</field>
             <value>
-                <elementReference>Picklist_Values_Loop</elementReference>
+                <stringValue>Pre-Approval</stringValue>
             </value>
         </inputAssignments>
         <object>Meeting_Attachment__c</object>
@@ -121,7 +257,7 @@
         <locationY>0</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Get_Picklist_Values</targetReference>
+            <targetReference>Meeting_Status</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -135,7 +271,7 @@
             <field>Name</field>
             <operator>EqualTo</operator>
             <value>
-                <elementReference>RecordTypeName</elementReference>
+                <elementReference>$Record.RecordType.Name</elementReference>
             </value>
         </filters>
         <getFirstRecordOnly>true</getFirstRecordOnly>
@@ -161,11 +297,34 @@
         <connector>
             <targetReference>Get_RT</targetReference>
         </connector>
+        <doesRequireRecordChangedToMeetCriteria>true</doesRequireRecordChangedToMeetCriteria>
+        <filterLogic>1 AND ( 2 OR 3 )</filterLogic>
+        <filters>
+            <field>Show_Custom_File_Uploader__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>OCE__Status__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Draft</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>OCE__Status__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Approved</stringValue>
+            </value>
+        </filters>
         <object>OCE__Meeting__c</object>
-        <recordTriggerType>Create</recordTriggerType>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
         <triggerType>RecordAfterSave</triggerType>
     </start>
-    <status>Draft</status>
+    <status>Active</status>
     <variables>
         <name>currentItem_Collection_Filter_1</name>
         <dataType>SObject</dataType>

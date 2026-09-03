@@ -2,7 +2,7 @@
 <RecordType xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Medical_Lead_Non_Promotional_Activities</fullName>
     <active>true</active>
-    <label>Medical Lead Non Promotional Activities</label>
+    <label>Medical Lead Non-Promotional Activities</label>
     <picklistValues>
         <picklist>Pre_Approval_Types__c</picklist>
         <values>

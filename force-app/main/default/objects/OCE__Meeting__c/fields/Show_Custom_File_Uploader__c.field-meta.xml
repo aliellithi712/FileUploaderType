@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Show_Custom_File_Uploader__c</fullName>
+    <description>Evaluates whether the custom file uploader LWC should be visible based on record type.</description>
+    <externalId>false</externalId>
+    <formula>IF(
+    CASE(RecordType.Name,
+        "AV Meeting (with speaker)", 1,
+        "AV Meeting (Without Speaker)", 1,
+        "Business Meal", 1,
+        "Enlisting Fees/Visiting Cards Fees/Other Fees", 1,
+        "HCP educational support in international Congress", 1,
+        "HCP educational support in National Congress", 1,
+        "Hospital /3rd Party Scientific Event Sponsorship", 1,
+        "Items of Medical / Educational Utility", 1,
+        "Marketing Lead Activities", 1,
+        "Medical Lead Non-Promotional Activities", 1,
+        "Non Promotional", 1,
+        "Opportunity Meeting", 1,
+        "Promotional – CHC", 1,
+        "Promotional – Primary Care", 1,
+        "Promotional – Specialty", 1,
+        "Significant Life Event", 1,
+        0
+    ) == 1,
+    true,
+    false
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Show Custom File Uploader</label>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

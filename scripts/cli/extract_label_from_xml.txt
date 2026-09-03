@@ -1,0 +1,1 @@
+ Get-ChildItem -Path . -Recurse -Filter *.xml | Select-String -Pattern '(?<=<label>)(.*?)(?=</label>)' | ForEach-Object { $_.Matches.Value } | Out-File -FilePath extracted_labels.txt -Encoding utf8
