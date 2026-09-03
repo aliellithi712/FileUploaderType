@@ -3,7 +3,7 @@
     <fullName>Meeting__c</fullName>
     <label>Meeting</label>
     <referenceTo>OCE__Meeting__c</referenceTo>
-    <relationshipLabel>test</relationshipLabel>
+    <relationshipLabel>Current Attachments</relationshipLabel>
     <relationshipName>Meeting_Attachments</relationshipName>
     <relationshipOrder>0</relationshipOrder>
     <reparentableMasterDetail>false</reparentableMasterDetail>
