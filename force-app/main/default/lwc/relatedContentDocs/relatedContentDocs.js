@@ -253,12 +253,15 @@ handleRefresh() {
             // this.isLoading = false;
             this.files = result.map(item => {
                 return {
-                    ...item.file,
+                    ...item,
                     attachmentType: item.attachmentType,
                     attachmentName: item.attachmentName,
-                    fileLink: `/sfc/servlet.shepherd/version/download/${item.file.Id}`,
-                    Id : item.file.ContentDocumentId,
-                    description: item.file.Description ? item.file.Description : '',
+                    CreatedDate: item.createdDate,
+                    fileLink: item.fileId?.startsWith('00P')
+                        ? `/servlet/servlet.FileDownload?file=${item.fileId}`
+                        : `/sfc/servlet.shepherd/version/download/${item.fileId}`,
+                    Id: item.ContentDocumentId ? item.ContentDocumentId : item.fileId,
+                    description: item.description || item.Description || ''
                 };
             });
             this.error = undefined;
