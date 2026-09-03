@@ -17,6 +17,8 @@ import {
 import {NavigationMixin} from 'lightning/navigation'
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { RefreshEvent } from "lightning/refresh";
+import { loadStyle } from 'lightning/platformResourceLoader';
+import CustomTableStyles from '@salesforce/resourceUrl/CustomTableStyles';
 
 
 const ACTIONS = [
@@ -132,7 +134,17 @@ export default class RelatedFilesDatatable extends NavigationMixin(LightningElem
 
 
     }
-    renderedCallback(){}
+    renderedCallback(){
+        loadStyle(this, CustomTableStyles)
+            .then(() => {
+                this.isStyleLoaded = true;
+                console.log('Global custom table stylesheet injected successfully.');
+            })
+            .catch(error => {
+                console.error('Error loading global datatable stylesheet', error);
+            });
+
+    }
     disconnectedCallback() {
         unregisterRefreshHandler(this.refreshHandlerID);
     }

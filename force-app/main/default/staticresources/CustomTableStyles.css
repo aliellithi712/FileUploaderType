@@ -1,0 +1,119 @@
+/* 1. Target the primitive wrapper element to force the curvature layout */
+.direct-heavy-datatable {
+    border-radius: 12px !important;
+    /* Clean, modern rounded corners */
+    overflow: hidden !important;
+    /* Prevents internal cells from clipping the corners */
+    border: 1px solid #cbd5e1 !important;
+    /* Muted light grey border outline */
+    display: block !important;
+}
+
+/* 2. Target the actual internal Salesforce table class */
+.direct-heavy-datatable .slds-table {
+    background-color: #ffffff !important;
+    /* Pure white base table background */
+    border-collapse: separate !important;
+    /* REQUIRED: Destroys sharp default system angles */
+    border-spacing: 0 !important;
+    /* Removes gaps created by separate collapse mode */
+    border: none !important;
+    /* Removes double border tracking */
+}
+
+/* 3. Style the Table Header Panel (Clean Crisp Grey) */
+.direct-heavy-datatable thead th {
+    background-color: #f1f5f9 !important;
+    /* Very soft light slate grey header */
+    border-bottom: 2px solid #cbd5e1 !important;
+    /* Stronger divider line under header */
+}
+
+/* 4. Style the Header Text Elements (Dark Charcoal) */
+.direct-heavy-datatable thead th .slds-truncate,
+.direct-heavy-datatable thead th a,
+.direct-heavy-datatable thead th button {
+    color: #334155 !important;
+    /* Dark slate text for high visibility */
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    font-size: 0.8rem !important;
+    letter-spacing: 0.5px !important;
+}
+
+/* 5. Alternate Zebra Striping for Data Rows (Light Mix) */
+.direct-heavy-datatable tbody tr:nth-of-type(even) {
+    background-color: #f8fafc !important;
+    /* Extremely soft off-white/grey row */
+}
+
+.direct-heavy-datatable tbody tr:nth-of-type(odd) {
+    background-color: #ffffff !important;
+    /* Stark white row */
+}
+
+/* 6. Row Borders and Text Colors inside data cells (Dark High Contrast) */
+.direct-heavy-datatable tbody td {
+    color: #0f172a !important;
+    /* Near-black dark text color for supreme readability */
+    border-bottom: 1px solid #e2e8f0 !important;
+    /* Clean internal row gridlines */
+}
+
+/* Eliminate the last row's bottom border to prevent inner clipping issues */
+.direct-heavy-datatable tbody tr:last-child td {
+    border-bottom: none !important;
+}
+
+/* 7. Professional Sky Blue Row Hover Effect */
+.direct-heavy-datatable tbody tr:hover td {
+    background-color: #e0f2fe !important;
+    /* Soft, refreshing sky blue row highlight */
+    color: #0f172a !important;
+    /* Retain dark text alignment on hover */
+}
+
+/* 8. Hyperlinks / File Name Styling inside the Table (Deep Contrast Blue) */
+.direct-heavy-datatable tbody td a {
+    color: #1d4ed8 !important;
+    /* Deep corporate blue for highly visible clickable file names */
+    text-decoration: none !important;
+    font-weight: 700 !important;
+    /* Emphasized file name text weight */
+}
+
+.direct-heavy-datatable tbody td a:hover {
+    color: #1e40af !important;
+    /* Even darker blue upon hover state */
+    text-decoration: underline !important;
+}
+
+/* 9. Row Action Dropdown Menu Icons */
+.direct-heavy-datatable lightning-button-icon button {
+    color: #475569 !important;
+    /* Dark grey dropdown arrows for light themes */
+}
+
+.direct-heavy-datatable lightning-button-icon button:hover {
+    color: #0f172a !important;
+}
+
+/* Bypasses the Shadow DOM to center the header elements of the card */
+lightning-card .slds-card__header {
+    justify-content: center !important;
+    text-align: center !important;
+}
+
+/* Centers the inner flex wrapper containing the icon and title text */
+lightning-card .slds-media__body {
+    text-align: center !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 8px !important;
+    /* Adds standard spacing between the icon and text */
+}
+
+lightning-card .slds-media__figure {
+    display: none !important;
+}
