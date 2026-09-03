@@ -171,8 +171,8 @@ public with sharing class FileListerController {
 
                 if (requiresReparenting) {
                     List<Meeting_Attachment__c> newAttachments = [
-                        SELECT Id FROM Meeting_Attachment__c
-                        WHERE Type__c = :targetType AND Meeting__c = :meetingId
+                        SELECT Id,Name FROM Meeting_Attachment__c
+                        WHERE Name = :targetType AND Meeting__c = :meetingId
                         LIMIT 1
                     ];
 

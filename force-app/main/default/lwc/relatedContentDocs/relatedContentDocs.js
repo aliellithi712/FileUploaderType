@@ -120,7 +120,6 @@ export default class RelatedFilesDatatable extends NavigationMixin(LightningElem
                     type: 'Post_Approval_Types__c'
                 });
             }
-            console.log(this.formData);
             return Promise.resolve([]);
 
             // return getPicklistValues({recordId: this.recordId, type: 'Post_Approval_Types__c' });
@@ -134,7 +133,6 @@ export default class RelatedFilesDatatable extends NavigationMixin(LightningElem
             }));
 
             this.formData.type = [...this.formData.type, ...postItems];
-            console.log(this.formData);
 
         })
         .catch(error => {
@@ -148,7 +146,6 @@ export default class RelatedFilesDatatable extends NavigationMixin(LightningElem
         loadStyle(this, CustomTableStyles)
             .then(() => {
                 this.isStyleLoaded = true;
-                console.log('Global custom table stylesheet injected successfully.');
             })
             .catch(error => {
                 console.error('Error loading global datatable stylesheet', error);
@@ -337,10 +334,8 @@ handleRefresh() {
 
                 const rawParsed = JSON.parse(JSON.stringify(this.tmpRow));
                 const currentRow = Array.isArray(rawParsed) ? rawParsed[0] : rawParsed;
-
                 this.formData.currentType = currentRow?.attachmentName;
                 this.formData.currentParentType = currentRow?.attachmentType;
-                console.log('Updated formData:', JSON.parse(JSON.stringify(this.formData)));
                 this.isSecondModalOpen = true;
 
                 /*
