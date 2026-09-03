@@ -1,8 +1,9 @@
 import { LightningElement, api } from 'lwc';
 import getRelatedFiles from '@salesforce/apex/FileListerController.getRelatedFiles';
 import getRecordStatus from '@salesforce/apex/FileListerController.getRecordStatus';
+// import getRecordData from '@salesforce/apex/FileListerController.getRecordData';
 import handleChangeNameDescriptionPicklist from '@salesforce/apex/FileListerController.changeNameDescriptionPicklist';
-import getPicklistVlaues from '@salesforce/apex/FileListerController.getPicklistVlaues';
+import getPicklistValues from '@salesforce/apex/FileListerController.getPicklistValues';
 import deleteRecord from '@salesforce/apex/FileListerController.deleteRecord';
 import {
     registerRefreshContainer,
@@ -35,12 +36,14 @@ const BASE_COLUMNS = [
         },
         sortable: true
     },
+    { label: 'Attachment Name', fieldName: 'attachmentName', type: 'string', sortable: true },
     {
         label: 'Description',
         fieldName: 'description',
         sortable: true
 
     },
+
     // { label: 'File Type', fieldName: 'FileType', sortable: true },
     { label: 'Type', fieldName: 'attachmentType', type: 'string', sortable: true },
     { label: 'Uploaded On', fieldName: 'CreatedDate', type: 'date', typeAttributes: {
@@ -93,11 +96,37 @@ export default class RelatedFilesDatatable extends NavigationMixin(LightningElem
 
     connectedCallback() {
         this.getRecordStatus();
+
         //this.refreshContainerID = registerRefreshContainer(this, this.handleRefresh.bind(this));
         this.refreshHandlerID = registerRefreshHandler(this.template.host, this.handleRefresh.bind(this));
-        getPicklistVlaues().then(result => {
-            this.formData.type = result;
-        }).catch(error => {
+        getPicklistValues({recordId: this.recordId ,type: 'Pre_Approval_Types__c' }).then(result => {
+            const preItems = result.map(item => ({
+                label: item.label,
+                value: item.value,
+                type: 'Pre-Approval'
+            }));
+
+            this.formData.type = [...preItems];
+            this.formData.name = 'Pre-Approval';
+
+            return getPicklistValues({recordId: this.recordId, type: 'Post_Approval_Types__c' });
+        })
+        .then(postResult => {
+
+            const postItems = postResult.map(item => ({
+                label: item.label,
+                value: item.value,
+                type: 'Post-Approval'
+            }));
+
+            this.formData.type = [...this.formData.type, ...postItems];
+
+
+            console.log(this.formData);
+
+        })
+        .catch(error => {
+            console.error(error);
             this.error = error;
         });
 
@@ -107,6 +136,29 @@ export default class RelatedFilesDatatable extends NavigationMixin(LightningElem
     disconnectedCallback() {
         unregisterRefreshHandler(this.refreshHandlerID);
     }
+
+    get typeOptions() {
+        return ['Pre-Approval', 'Post-Approval'].map(type => ({
+            label: type,
+            value: type
+        }));
+    }
+
+    get categoryOptions() {
+
+        const activeParentType = this.formData?.newParentType || this.formData?.currentParentType;
+
+        if (!activeParentType || !Array.isArray(this.formData?.type)) {
+            return [];
+        }
+
+        return this.formData.type
+            .filter(item => item.type === activeParentType)
+            .map(item => ({
+                label: item.label,
+                value: item.value
+            }));
+        }
 
 
     getRowActions(row, doneCallback) {
@@ -203,6 +255,7 @@ handleRefresh() {
                 return {
                     ...item.file,
                     attachmentType: item.attachmentType,
+                    attachmentName: item.attachmentName,
                     fileLink: `/sfc/servlet.shepherd/version/download/${item.file.Id}`,
                     Id : item.file.ContentDocumentId,
                     description: item.file.Description ? item.file.Description : '',
@@ -227,9 +280,11 @@ handleRefresh() {
             ...this.formData,
             name: row.Title,
             description: row.description,
-            oldType : row.attachmentType,
+            // oldType : row.attachmentType,
             ContentDocumentId: row.Id
         }
+
+
 
         switch (actionName) {
             case 'view_record':
@@ -246,9 +301,15 @@ handleRefresh() {
                 break;
             case 'edit_record':
                 this.tmpRow = row;
-                this.oldType = row.attachmentType;
-                this.isSecondModalOpen = true;
+                // this.oldType = row.attachmentType;
 
+                const rawParsed = JSON.parse(JSON.stringify(this.tmpRow));
+                const currentRow = Array.isArray(rawParsed) ? rawParsed[0] : rawParsed;
+
+                this.formData.currentType = currentRow?.attachmentName;
+                this.formData.currentParentType = currentRow?.attachmentType;
+                console.log('Updated formData:', JSON.parse(JSON.stringify(this.formData)));
+                this.isSecondModalOpen = true;
 
                 /*
                 this[NavigationMixin.Navigate]({
@@ -330,8 +391,36 @@ handleRefresh() {
         };
     }
     handleSave(event){
+
+        const FIELD_API_MAP = {
+            'Pre-Approval': 'Pre_Approval_Types__c',
+            'Post-Approval': 'Post_Approval_Types__c'
+        };
+
+        if (this.formData?.newType && !this.formData?.newParentType) {
+            this.formData = {
+                ...this.formData,
+                newParentType: this.formData.currentParentType
+            };
+        }
+        this.formData = {
+            ...this.formData,
+            currentParentType: FIELD_API_MAP[this.formData.currentParentType] || this.formData.currentParentType,
+            newParentType: FIELD_API_MAP[this.formData.newParentType] || this.formData.newParentType
+        };
         this.isLoading = true;
-        handleChangeNameDescriptionPicklist({ recordId: this.tmpRow.Id, name: this.formData.name, description: this.formData.description, newType: this.formData.newType , oldType: this.formData.oldType, meetingId: this.recordId }).then(result => {
+        console.log('PASSED VALUES ', this.formData)
+
+
+        handleChangeNameDescriptionPicklist({
+            recordId: this.tmpRow.Id,
+            name: this.formData.name,
+            description: this.formData.description,
+            sourceType: this.formData.currentType ,
+            targetType: this.formData.newType,
+            sourceCategoryFieldName:this.formData.currentParentType,
+            targetCategoryFieldName:this.formData.newParentType,
+            meetingId: this.recordId }).then(result => {
             if(result == 'success'){
                 this.isLoading = false;
                 const evt = new ShowToastEvent({

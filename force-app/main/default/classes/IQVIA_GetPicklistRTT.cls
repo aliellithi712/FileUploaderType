@@ -9,15 +9,15 @@ public class IQVIA_GetPicklistRTT {
     public IQVIA_GetPicklistRTT() {
         this.service = new IQVIA_PicklistServiceImpl();
     }
-    
+
     // -------------------------
     // Non-Flow input
     // -------------------------
-     
-    
-    public List<String> getValues(String obj, String rt, String pn) {
-        return service.getPicklist(obj, rt, pn); 
-    } 
+
+
+    public List<Map<String, String>> getValues(String obj, String rt, String pn) {
+        return service.getPicklistMap(obj, rt, pn);
+    }
 
 
     // -------------------------
@@ -29,12 +29,12 @@ public class IQVIA_GetPicklistRTT {
 
         @InvocableVariable(required=true)
         public String recordTypeId;
-        
+
         @InvocableVariable(required=true)
         public String picklistName;
     }
 
-    
+
     public class Response {
         @InvocableVariable
         public List<String> returnValues;

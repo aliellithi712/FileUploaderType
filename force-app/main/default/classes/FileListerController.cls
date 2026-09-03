@@ -2,13 +2,15 @@ public with sharing class FileListerController {
 
     public class FileWrapper {
     @AuraEnabled public ContentVersion file {get; set;}
+    @AuraEnabled public String attachmentName {get; set;}
     @AuraEnabled public String attachmentType {get; set;}
 
-    public FileWrapper(ContentVersion cv, String type) {
+    public FileWrapper(ContentVersion cv, String type, String attachmentName) {
         this.file = cv;
         this.attachmentType = type;
-    }
-}
+        this.attachmentName = attachmentName;
+    }}
+
 
     @AuraEnabled
     public static List<FileWrapper> getRelatedFiles(String recordId) {
@@ -16,7 +18,7 @@ public with sharing class FileListerController {
 
 
         Map<Id, Meeting_Attachment__c> attachmentMap = new Map<Id, Meeting_Attachment__c>([
-            SELECT Id,Type__c
+            SELECT Id,Type__c,Name
             FROM Meeting_Attachment__c
             WHERE Id IN (Select LinkedEntityId FROM ContentDocumentLink) AND Meeting__c = :recordId
         ]);
@@ -30,7 +32,7 @@ public with sharing class FileListerController {
         map<Id, ContentDocumentLink> docToInstances = new Map<Id, ContentDocumentLink>();
         Map<Id, ContentVersion> docToVersion = new Map<Id, ContentVersion>();
 
-        for (ContentDocumentLink cdl : [SELECT Id, LinkedEntityId,ContentDocumentId FROM ContentDocumentLink WHERE LinkedEntityId IN :attachmentIds]) {
+        for (ContentDocumentLink cdl : [SELECT Id, LinkedEntityId,LinkedEntity.Name,ContentDocumentId FROM ContentDocumentLink WHERE LinkedEntityId IN :attachmentIds]) {
             contentDocumentIds.add(cdl.ContentDocumentId);
             docToInstances.put(cdl.ContentDocumentId, cdl);
         }
@@ -41,7 +43,8 @@ public with sharing class FileListerController {
 
         for (ContentDocumentLink cdl : docToInstances.values()) {
             String typeValue = attachmentMap.get(cdl.LinkedEntityId).Type__c;
-            wrapperList.add(new FileWrapper(docToVersion.get(cdl.ContentDocumentId), typeValue));
+            String attachmentName = attachmentMap.get(cdl.LinkedEntityId).Name;
+            wrapperList.add(new FileWrapper(docToVersion.get(cdl.ContentDocumentId), typeValue,attachmentName));
         }
 
         return wrapperList;
@@ -77,58 +80,94 @@ public with sharing class FileListerController {
     }
 
 
-    @AuraEnabled
-    public static List<Map<String, String>> getPicklistVlaues(){
+    @AuraEnabled(cacheable=true)
+    public static List<Map<String, String>> getPicklistValues(String recordId, String type) {
         try {
-            List<Map<String, String>> options = new List<Map<String, String>>();
+            String objectName = 'Meeting_Attachment__c';
+            String recordTypeId = IQVIARecordTypeUtils.getMatchingRecordTypeId(recordId,objectName);
 
-        // Describe the field
-        Schema.DescribeFieldResult fieldResult = Meeting_Attachment__c.Type__c.getDescribe();
-        List<Schema.PicklistEntry> pList = fieldResult.getPicklistValues();
+            IQVIA_PicklistService picklistService = new IQVIA_PicklistServiceImpl();
+            IQVIA_GetPicklistRTT runner = new IQVIA_GetPicklistRTT(picklistService);
+            List<Map<String, String>> options = runner.getValues(objectName, recordTypeId, type);
 
-        for (Schema.PicklistEntry p: pList) {
-            Map<String, String> option = new Map<String, String>();
-            option.put('label', p.getLabel());
-            option.put('value', p.getValue());
-            options.add(option);
-        }
-        return options;
-    }
-        catch (Exception e) {
+            // Schema.SObjectField fieldToken = Meeting_Attachment__c.SObjectType.getDescribe().fields.getMap().get(type);
+
+            // if (fieldToken != null) {
+            //     Schema.DescribeFieldResult fieldResult = fieldToken.getDescribe();
+
+            //     for (Schema.PicklistEntry p : fieldResult.getPicklistValues()) {
+            //         if (p.isActive()) {
+            //             options.add(new Map<String, String>{
+            //                 'label' => p.getLabel(),
+            //                 'value' => p.getValue()
+            //             });
+            //         }
+            //     }
+            // }
+
+            return options;
+        } catch (Exception e) {
             throw new AuraHandledException(e.getMessage());
         }
     }
 
+
     @AuraEnabled
-    public static string changeNameDescriptionPicklist(String recordId, String name, String description, String newType, String oldType, String meetingId){
+    public static string changeNameDescriptionPicklist(
+        String recordId,
+        String name,
+        String description,
+        String sourceType,
+        String targetType,
+        String sourceCategoryFieldName,
+        String targetCategoryFieldName,
+        String meetingId
+        ){
         try {
             List<ContentVersion> cv = [ Select Id, Title, description FROM ContentVersion WHERE ContentDocumentId = :recordId ];
             cv[0].Title = name;
             cv[0].description = description;
             update cv[0];
 
-            if (newType != oldType && newType != null && oldType != null) {
                 try {
+                    if (String.isBlank(sourceCategoryFieldName) || String.isBlank(targetCategoryFieldName) || String.isBlank(sourceType) || String.isBlank(targetType)) {
+                        return null;
+                    }
 
-                    Meeting_Attachment__c oldAssignedAttachment = [Select Id, Name, Type__c FROM Meeting_Attachment__c WHERE Type__c = :oldType AND Meeting__c = :meetingId];
+                    String oldQuery = 'SELECT Id, Name FROM Meeting_Attachment__c ' +
+                                    'WHERE Meeting__c = :meetingId ' +
+                                    'AND ' + sourceCategoryFieldName + ' = :sourceType LIMIT 1';
 
-                    Meeting_Attachment__c newAssignedAttachment = [Select Id, Name, Type__c FROM Meeting_Attachment__c WHERE Type__c = :newType AND Meeting__c = :meetingId];
+                    String newQuery = 'SELECT Id, Name FROM Meeting_Attachment__c ' +
+                                    'WHERE Meeting__c = :meetingId ' +
+                                    'AND ' + targetCategoryFieldName + ' = :targetType LIMIT 1';
 
-                    //delete the old content document link
-                    ContentDocumentLink oldCdl = [Select Id FROM ContentDocumentLink WHERE ContentDocumentId = :recordId AND LinkedEntityId = :oldAssignedAttachment.Id];
+                    List<Meeting_Attachment__c> oldAttachments = Database.query(oldQuery);
+                    List<Meeting_Attachment__c> newAttachments = Database.query(newQuery);
+
+                    if (oldAttachments.isEmpty()) {
+                        System.debug('No source attachment record found for field ' + sourceCategoryFieldName + ' = ' + sourceType);
+                        return null;
+                    }
+
+                    Id oldAttachmentId = oldAttachments[0].Id;
+                    Id newAttachmentId = newAttachments[0].Id;
+
+                    ContentDocumentLink oldCdl = [Select Id FROM ContentDocumentLink WHERE ContentDocumentId = :recordId AND LinkedEntityId = :oldAttachmentId];
                     delete oldCdl;
 
                     ContentDocumentLink cdl = new ContentDocumentLink();
-                    cdl.ContentDocumentId = recordId; // Get this from the ContentVersion
-                    cdl.LinkedEntityId = newAssignedAttachment.Id;       // The ID of the Meeting Attachment
-                    cdl.ShareType = 'V';                           // 'V' for Viewer permission
+                    cdl.ContentDocumentId = recordId;
+                    cdl.LinkedEntityId = newAttachmentId;
+                    cdl.ShareType = 'V';
                     insert cdl;
+
+                    return 'success';
                 } catch (Exception e) {
-
+                    throw new AuraHandledException(e.getMessage());
                 }
-            }
 
-            return 'success';
+
 
         } catch (Exception e) {
             throw new AuraHandledException(e.getMessage());

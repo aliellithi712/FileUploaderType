@@ -51,7 +51,11 @@
                                             data-field="description">
                                         </lightning-textarea>
 
-                                        <lightning-combobox data-id="newType" label="Type" value={formData.type} options={formData.type}
+                                        <lightning-combobox data-id="newParentType" label="Type" value={formData.currentParentType} options={typeOptions}
+                                            onchange={handleInputChange} data-field="type">
+                                        </lightning-combobox>
+
+                                        <lightning-combobox data-id="newType" label="Category" value={formData.currentType} options={categoryOptions}
                                             onchange={handleInputChange} data-field="type">
                                         </lightning-combobox>
                                     </div>
