@@ -111,7 +111,19 @@ export default class RelatedFilesDatatable extends NavigationMixin(LightningElem
             this.formData.type = [...preItems];
             this.formData.name = 'Pre-Approval';
 
-            return getPicklistValues({recordId: this.recordId, type: 'Post_Approval_Types__c' });
+            const status = this.FilterFields?.OCE__Status__c;
+            const closedStatuses = ['Approved', 'Closed', 'Cancelled'];
+
+            if (closedStatuses.includes(status)) {
+                return getPicklistValues({
+                    recordId: this.recordId,
+                    type: 'Post_Approval_Types__c'
+                });
+            }
+            console.log(this.formData);
+            return Promise.resolve([]);
+
+            // return getPicklistValues({recordId: this.recordId, type: 'Post_Approval_Types__c' });
         })
         .then(postResult => {
 
@@ -122,8 +134,6 @@ export default class RelatedFilesDatatable extends NavigationMixin(LightningElem
             }));
 
             this.formData.type = [...this.formData.type, ...postItems];
-
-
             console.log(this.formData);
 
         })
@@ -150,7 +160,14 @@ export default class RelatedFilesDatatable extends NavigationMixin(LightningElem
     }
 
     get typeOptions() {
-        return ['Pre-Approval', 'Post-Approval'].map(type => ({
+        const status = this.FilterFields?.OCE__Status__c;
+        const closedStatuses = ['Approved', 'Closed', 'Cancelled'];
+
+        const types = closedStatuses.includes(status)
+            ? ['Pre-Approval', 'Post-Approval']
+            : ['Pre-Approval'];
+
+        return types.map(type => ({
             label: type,
             value: type
         }));
@@ -226,7 +243,7 @@ export default class RelatedFilesDatatable extends NavigationMixin(LightningElem
     }
 */
 
-// 1. Your handler should NOT take arguments usually
+
 handleRefresh() {
 
     return new Promise((resolve) => {
@@ -354,7 +371,7 @@ handleRefresh() {
         this.isSecondModalOpen = false;
         this.formData = {
             ...this.formData,
-            newType: ''
+            newType: this.formData.currentType
         }
     }
 
